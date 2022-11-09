@@ -1,0 +1,19 @@
+{
+  "name": "ss-ipsec-compons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "setup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greengerong/ss-ipsec-componse.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greengerong/ss-ipsec-componse/issues"
+  },
+  "homepage": "https://github.com/greengerong/ss-ipsec-componse#readme"
+}
