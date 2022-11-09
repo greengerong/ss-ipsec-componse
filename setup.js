@@ -1,5 +1,5 @@
-import * as child_process from "child_process";
-import * as fs from "fs";
+const child_process = require("child_process");
+const fs = require("fs");
 
 const env = process.env;
 const vpnIpsecPsk = env.VPN_IPSEC_PSK;
