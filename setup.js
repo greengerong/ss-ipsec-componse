@@ -8,14 +8,18 @@ const vpnPassword = env.VPN_PASSWORD;
 
 const ssPasswords = [vpnPassword, ...(env.ssPasswords || [])];
 
+console.log(`***** vpn ipsec psk start ...`);
 // vpn ipsec psk
 const shellIpsecPsk = `wget https://git.io/vpnsetup -O vpn.sh && sudo VPN_IPSEC_PSK='${vpnIpsecPsk}' VPN_USER='${vpnUser}' VPN_PASSWORD='${vpnPassword}' sh vpn.sh`;
 child_process.execSync(shellIpsecPsk, { stdio: 'inherit' });
+
+console.log(`***** vpn ss: install python2 ...`);
 
 // vpn ss: install python2
 const shellInstallSS = `sudo apt install python2 -y && curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py && sudo python2 get-pip.py && sudo pip2 install shadowsocks`;
 child_process.execSync(shellInstallSS, { stdio: 'inherit' });
 
+console.log(`***** vpn ss: ss config start ...`);
 // vpn ss: ss config
 const ssConfig = {
     "server": "::",
@@ -31,17 +35,23 @@ const ssConfig = {
 
 let port = 8377;
 ssPasswords.forEach(it => {
-    ssConfig[port] = it;
+    ssConfig.port_password[port] = it;
     port++
 });
 
+console.log(`***** vpn ss: ss config`, JSON.stringify(ssConfig));
+
 fs.writeFileSync(`/etc/shadowsocks.json`, JSON.stringify(ssConfig));
 
+console.log(`***** vpn ss: fix open-ssl script`);
 // vpn ss: fix open-ssl script
 const openSslScript = fs.readFileSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py`, 'utf8');
 const fixScript = openSslScript.replaceAll("libcrypto.EVP_CIPHER_CTX_cleanup", "libcrypto.EVP_CIPHER_CTX_reset");
 fs.writeFileSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py`, fixScript);
 
+console.log(`***** vpn ss: start shadow-socket`);
 // vpn ss: start shadow-socket
 const shellStartSS = `sudo ssserver -c /etc/shadowsocks.json -d start`;
 child_process.execSync(shellStartSS, { stdio: 'inherit' });
+
+console.log(`***** finish all setup done.`);
