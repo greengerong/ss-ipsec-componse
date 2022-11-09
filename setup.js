@@ -45,11 +45,18 @@ console.log(`***** vpn ss: ss config`, JSON.stringify(ssConfig));
 
 fs.writeFileSync(`/etc/shadowsocks.json`, JSON.stringify(ssConfig));
 
-console.log(`***** vpn ss: fix open-ssl script`);
+// vpn ss: delete openssl.pyc
+console.log(`***** vpn ss: delete openssl.pyc`);
+fs.unlinkSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc`);
+
 // vpn ss: fix open-ssl script
+console.log(`***** vpn ss: fix open-ssl script`);
 const openSslScript = fs.readFileSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py`, 'utf8');
 const fixScript = openSslScript.replaceAll("libcrypto.EVP_CIPHER_CTX_cleanup", "libcrypto.EVP_CIPHER_CTX_reset");
 fs.writeFileSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py`, fixScript);
+
+libcrypto.EVP_CIPHER_CTX_reset
+libcrypto.EVP_CIPHER_CTX_reset
 
 console.log(`***** vpn ss: start shadow-socket`);
 // vpn ss: start shadow-socket
@@ -57,3 +64,4 @@ const shellStartSS = `sudo ssserver -c /etc/shadowsocks.json -d start`;
 child_process.execSync(shellStartSS, { stdio: 'inherit' });
 
 console.log(`***** finish all setup done.`);
+
