@@ -2,6 +2,8 @@ const child_process = require("child_process");
 const fs = require("fs");
 
 const env = process.env;
+console.log(`***** envt with`, JSON.stringify(env));
+
 const vpnIpsecPsk = env.VPN_IPSEC_PSK;
 const vpnUser = env.VPN_USER;
 const vpnPassword = env.VPN_PASSWORD;
