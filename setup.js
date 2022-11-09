@@ -47,7 +47,9 @@ fs.writeFileSync(`/etc/shadowsocks.json`, JSON.stringify(ssConfig));
 
 // vpn ss: delete openssl.pyc
 console.log(`***** vpn ss: delete openssl.pyc`);
-fs.unlinkSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc`);
+// fs.unlinkSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc`);
+const shellRmPyc = `sudo rm -rf /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc`;
+child_process.execSync(shellRmPyc, { stdio: 'inherit' });
 
 // vpn ss: fix open-ssl script
 console.log(`***** vpn ss: fix open-ssl script`);
@@ -64,4 +66,6 @@ const shellStartSS = `sudo ssserver -c /etc/shadowsocks.json -d start`;
 child_process.execSync(shellStartSS, { stdio: 'inherit' });
 
 console.log(`***** finish all setup done.`);
+
+
 
