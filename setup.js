@@ -2,13 +2,19 @@ const child_process = require("child_process");
 const fs = require("fs");
 
 const env = process.env;
-console.log(`***** envt with`, JSON.stringify(env));
 
 const vpnIpsecPsk = env.VPN_IPSEC_PSK;
 const vpnUser = env.VPN_USER;
 const vpnPassword = env.VPN_PASSWORD;
-
 const ssPasswords = [vpnPassword, ...(env.ssPasswords || [])];
+let port = env.VPN_PORT_SEED || 8377;
+console.log(`***** env with`, JSON.stringify({
+    vpnIpsecPsk,
+    vpnUser,
+    vpnPassword,
+    ssPasswords,
+    port
+}));
 
 console.log(`***** vpn ipsec psk start ...`);
 // vpn ipsec psk
@@ -35,7 +41,6 @@ const ssConfig = {
     "fast_open": false
 };
 
-let port = 8377;
 ssPasswords.forEach(it => {
     ssConfig.port_password[port] = it;
     port++
@@ -66,6 +71,5 @@ const shellStartSS = `sudo ssserver -c /etc/shadowsocks.json -d start`;
 child_process.execSync(shellStartSS, { stdio: 'inherit' });
 
 console.log(`***** finish all setup done.`);
-
 
 
