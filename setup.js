@@ -62,8 +62,6 @@ const openSslScript = fs.readFileSync(`/usr/local/lib/python2.7/dist-packages/sh
 const fixScript = openSslScript.replaceAll("libcrypto.EVP_CIPHER_CTX_cleanup", "libcrypto.EVP_CIPHER_CTX_reset");
 fs.writeFileSync(`/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py`, fixScript);
 
-libcrypto.EVP_CIPHER_CTX_reset
-libcrypto.EVP_CIPHER_CTX_reset
 
 console.log(`***** vpn ss: start shadow-socket`);
 // vpn ss: start shadow-socket
